@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrackerIO.API", "TrackerIO.API\TrackerIO.API.csproj", "{BDA17724-56F2-4133-985F-AC37ED90D6D9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrackerIO.Services", "TrackerIO.Services\TrackerIO.Services.csproj", "{A7A08B52-A8CD-422F-8ED2-A951CBCF7CCC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrackerIO.Data", "TrackerIO.Data\TrackerIO.Data.csproj", "{61E7FF6C-05F2-48B3-9940-B5171C4A70F2}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BDA17724-56F2-4133-985F-AC37ED90D6D9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BDA17724-56F2-4133-985F-AC37ED90D6D9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BDA17724-56F2-4133-985F-AC37ED90D6D9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BDA17724-56F2-4133-985F-AC37ED90D6D9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A7A08B52-A8CD-422F-8ED2-A951CBCF7CCC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A7A08B52-A8CD-422F-8ED2-A951CBCF7CCC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A7A08B52-A8CD-422F-8ED2-A951CBCF7CCC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A7A08B52-A8CD-422F-8ED2-A951CBCF7CCC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{61E7FF6C-05F2-48B3-9940-B5171C4A70F2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{61E7FF6C-05F2-48B3-9940-B5171C4A70F2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{61E7FF6C-05F2-48B3-9940-B5171C4A70F2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{61E7FF6C-05F2-48B3-9940-B5171C4A70F2}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
