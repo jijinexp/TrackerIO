@@ -1,10 +1,10 @@
-using System.IO;
-using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
+using TrackerIO.Services.Upload.CSV;
 
 namespace TrackerIO.Services.Upload;
 
 
 public interface IUploadService
 {
-    public Task<ContentResponse> Upload(StreamReader streamReader);
+    public ServiceResponse<CsvUploadService> Upload(IFormFile? file);
 }

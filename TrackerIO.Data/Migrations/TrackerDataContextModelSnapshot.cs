@@ -48,6 +48,30 @@ namespace TrackerIO.Data.Migrations
 
                     b.ToTable("Transactions");
                 });
+
+            modelBuilder.Entity("TrackerIO.Data.Models.UploadFile", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<byte[]>("FileContent")
+                        .IsRequired()
+                        .HasColumnType("BLOB");
+
+                    b.Property<string>("FileExtension")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("FileName")
+                        .HasColumnType("TEXT");
+
+                    b.Property<long?>("FileSize")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Files");
+                });
 #pragma warning restore 612, 618
         }
     }

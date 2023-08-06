@@ -1,14 +1,10 @@
-using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
 using CsvHelper;
 using CsvHelper.Configuration;
-using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Http;
 using TrackerIO.Data;
 using TrackerIO.Data.Models;
+using TrackerIO.Services.File;
 using TrackerIO.Services.Upload.CSV.Mappers;
 using TrackerIO.Services.Upload.CSV.Models;
 
@@ -17,19 +13,34 @@ namespace TrackerIO.Services.Upload.CSV;
 public class CsvUploadService : IUploadService
 {
     private readonly TrackerDataContext _context;
+    private readonly IFileService _fileService;
 
-    public CsvUploadService(TrackerDataContext context)
+    public CsvUploadService(TrackerDataContext context, IFileService fileService)
     {
         _context = context;
+        _fileService = fileService;
     }
-    public async Task<ContentResponse> Upload(StreamReader streamReader)
+    public ServiceResponse<CsvUploadService> Upload(IFormFile? file)
     {
         var recordCount = 0;
         try
         {
+            var csvBytes = _fileService.ConvertToBytes(file);
+            _fileService.CreateUploadFile(new UploadFile
+            {
+                FileName = Path.GetExtension(file?.FileName),
+                FileExtension = Path.GetExtension(file?.FileName),
+                FileSize = file?.Length,
+                FileContent = csvBytes
+            });
+            
+            using var memoryStream = new MemoryStream(csvBytes);
+            using var streamReader = new StreamReader(memoryStream);
             using var csvReader = new CsvReader(streamReader, CultureInfo.InvariantCulture);
-            await csvReader.ReadAsync();
+            csvReader.Read();
             csvReader.ReadHeader();
+            
+            
             var headerRecord = string.Join(",",csvReader.HeaderRecord!);
             ClassMap? selectedMap = string.IsNullOrEmpty(headerRecord) switch
             {
@@ -38,13 +49,14 @@ public class CsvUploadService : IUploadService
                 _ => throw new Exception("CSV Mapper not found!!")
             };
             csvReader.Context.RegisterClassMap(selectedMap);
-            var csvRecords = csvReader.GetRecords<CsvTransaction>().ToList();
             
+            var csvRecords = csvReader.GetRecords<CsvTransaction>().ToList();
             var duplicates = new List<CsvTransaction>();
             for (var index = 0; index < csvRecords.Count; index++)
             {
                 var csvRecord = csvRecords[index];
-                var dbRecord = _context.Transactions?.FirstOrDefault(a => a.CsvId == csvRecord.TransactionId);
+                var dbRecord = _context.Transactions?
+                    .FirstOrDefault(a => a.CsvId == csvRecord.TransactionId);
                 if (dbRecord is not null)
                     duplicates.Add(csvRecord);
             }
@@ -67,17 +79,15 @@ public class CsvUploadService : IUploadService
                 transactions.Add(transaction);
             }
             _context.Transactions?.AddRange(transactions);
-            await _context.SaveChangesAsync();
+            _context.SaveChanges();
         }
         catch (Exception e)
         {
             Console.WriteLine(e);
             throw;
         }
-        return new ContentResponse
-        {
-            Success = true,
-            Message = $"File processed successfully with {recordCount} records"
-        };
+
+        return new ServiceResponse<CsvUploadService>()
+            .Success($"File processed successfully with {recordCount} records");
     }
 }

@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 using TrackerIO.Data;
+using TrackerIO.Services.File;
+using TrackerIO.Services.Transactions;
 using TrackerIO.Services.Upload;
 using TrackerIO.Services.Upload.CSV;
 
@@ -10,7 +11,9 @@ public static class ServiceExtensions
 {
     public static void AddTrackerServices(this IServiceCollection services)
     {
+        services.AddScoped<IFileService,FileMetaDataService>();
         services.AddScoped<IUploadService,CsvUploadService>();
+        services.AddScoped<ITransactionService,TransactionService>();
     }
 
     public static void AddDatabase(this WebApplicationBuilder builder)
