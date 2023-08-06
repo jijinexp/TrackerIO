@@ -4,5 +4,6 @@ namespace TrackerIO.Services;
 
 public class TransactionResponse
 {
-    public List<Transaction> RawTransactions { get; set; }
+    public List<Transaction> RawTransactions { get; init; }
 }
+

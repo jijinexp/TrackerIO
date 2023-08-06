@@ -25,4 +25,24 @@ public class TransactionService : ITransactionService
         if (transactions is not null) response.RawTransactions.AddRange(transactions);
         return new ServiceResponse<TransactionResponse>().Success(response);
     }
+
+    public ServiceResponse<TransactionService> MergeTransactions(Guid fromId, Guid toId)
+    {
+        var fromTransaction = _context.Transactions?.FirstOrDefault(x => x.Id == fromId);
+        var toTransaction = _context.Transactions?.FirstOrDefault(x => x.Id == toId);
+        if (fromTransaction is not null && toTransaction is not null)
+        {
+            toTransaction.Date = fromTransaction.Date;
+            toTransaction.Amount = fromTransaction.Amount;
+            toTransaction.Description = fromTransaction.Description;
+            toTransaction.Type = fromTransaction.Type;
+            _context.Transactions?.Update(toTransaction);
+            _context.Transactions?.Remove(fromTransaction);
+            _context.SaveChanges();
+            return new ServiceResponse<TransactionService>().Success($"{fromTransaction.Description} merged with {toTransaction.Description}");
+        }
+
+        return new ServiceResponse<TransactionService>().BadRequest($"Invalid merge");
+
+    }
 }
