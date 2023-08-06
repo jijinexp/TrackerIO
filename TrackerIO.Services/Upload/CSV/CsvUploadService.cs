@@ -28,7 +28,7 @@ public class CsvUploadService : IUploadService
             var csvBytes = _fileService.ConvertToBytes(file);
             _fileService.CreateUploadFile(new UploadFile
             {
-                FileName = Path.GetExtension(file?.FileName),
+                FileName = Path.GetFileName(file?.FileName),
                 FileExtension = Path.GetExtension(file?.FileName),
                 FileSize = file?.Length,
                 FileContent = csvBytes
