@@ -1,0 +1,54 @@
+.center-table {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.table-container {
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px; /* Add padding to the whole container */
+    min-height: 100vh; /* Ensure the container takes at least the full viewport height */
+}
+
+table {
+    border-collapse: collapse;
+    width: 50%;
+    margin: 0 auto;
+}
+
+th, td {
+    border: 1px solid #ddd;
+    padding: 5px;
+    text-align: left;
+}
+
+th {
+    background-color: #f2f2f2;
+}
+
+th, td {
+    font-size: 12px; /* Adjust the font size as needed */
+}
+
+/* Add styles for pagination if needed */
+.pagination {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.pagination button {
+    margin: 0 5px;
+    padding: 5px 10px;
+    border: 1px solid #ddd;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+.pagination button.active {
+    background-color: #007bff;
+    color: #fff;
+    border: 1px solid #007bff;
+}

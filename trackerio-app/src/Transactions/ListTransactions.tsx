@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from "react";
 import axios from "axios";
 import '../App.css';
+import '../css/Table.css'
 
 interface Transaction {
     id: string,
@@ -43,8 +44,7 @@ function ListTransactions(){
     };
 
     return(
-        <div>
-            <h1>Transactions</h1>
+        <div className="table-container">
             <table>
                 <thead>
                 <tr>
@@ -61,6 +61,9 @@ function ListTransactions(){
                         <td>{row.type}</td>
                         <td>{row.bank}</td>
                         <td>{row.amount}</td>
+                        <td>
+                            <button>Edit</button>
+                        </td>
                     </tr>
                 ))}
                 </tbody>
