@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Http;
 using TrackerIO.Data;
 using TrackerIO.Data.Models;
 
@@ -13,11 +12,9 @@ public class FileMetaDataService :  IFileService
         _context = context;
     }
 
-    public byte[] ConvertToBytes(IFormFile? file)
+    public byte[] ConvertToBytes(MemoryStream fileStream)
     {
-        using var memoryStream = new MemoryStream();
-        file?.CopyTo(memoryStream);
-        return memoryStream.ToArray();
+        return fileStream.ToArray();
     }
 
     public void CreateUploadFile(UploadFile? record)

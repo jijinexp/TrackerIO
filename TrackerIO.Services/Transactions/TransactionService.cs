@@ -26,6 +26,7 @@ public class TransactionService : ITransactionService
             RawTransactions = new List<Transaction>() 
         };
         if (transactions is not null) response.RawTransactions.AddRange(transactions);
+        
         return new ServiceResponse<TransactionResponse>().Success(response);
     }
 

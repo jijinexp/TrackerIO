@@ -1,7 +1,6 @@
 using System.Globalization;
 using CsvHelper;
 using CsvHelper.Configuration;
-using Microsoft.AspNetCore.Http;
 using TrackerIO.Data;
 using TrackerIO.Data.Models;
 using TrackerIO.Services.File;
@@ -20,7 +19,7 @@ public class CsvUploadService : IUploadService
         _context = context;
         _fileService = fileService;
     }
-    public ServiceResponse<CsvUploadService> Upload(IFormFile? file)
+    public ServiceResponse<CsvUploadService> Upload(string? fileName,MemoryStream file)
     {
         var recordCount = 0;
         try
@@ -28,8 +27,8 @@ public class CsvUploadService : IUploadService
             var csvBytes = _fileService.ConvertToBytes(file);
             _fileService.CreateUploadFile(new UploadFile
             {
-                FileName = Path.GetFileName(file?.FileName),
-                FileExtension = Path.GetExtension(file?.FileName),
+                FileName = Path.GetFileName(fileName),
+                FileExtension = Path.GetExtension(fileName),
                 FileSize = file?.Length,
                 FileContent = csvBytes
             });

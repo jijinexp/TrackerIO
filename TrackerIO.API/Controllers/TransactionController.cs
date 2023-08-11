@@ -22,7 +22,9 @@ public class TransactionController : Controller
     {
         if (file is null || file.Length == 0)
             return NoContent();
-        var response = _uploadService.Upload(file);
+        using var memoryStream = new MemoryStream();
+        file?.CopyTo(memoryStream);
+        var response = _uploadService.Upload(file?.FileName, memoryStream);
         if (response.IsSuccess())
             return Ok(response.Message);
 

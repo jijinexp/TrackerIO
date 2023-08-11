@@ -6,4 +6,3 @@ public class TransactionResponse
 {
     public List<Transaction> RawTransactions { get; init; }
 }
-
