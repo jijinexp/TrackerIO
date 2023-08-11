@@ -19,18 +19,36 @@ table {
     margin: 0 auto;
 }
 
+/* Row styles */
+table tbody tr {
+    background-color: #f2f2f2; /* Light gray background color for all rows */
+}
+
+/* Add padding to rows */
+table tbody tr td {
+    padding: 8px; /* Adjust the padding as needed */
+}
+
 th, td {
-    border: 1px solid #ddd;
+/*    border: 1px solid #ddd;*/
     padding: 5px;
     text-align: left;
 }
 
 th {
-    background-color: #f2f2f2;
+    background-color: #00aa00;
 }
 
 th, td {
     font-size: 12px; /* Adjust the font size as needed */
+}
+
+td.positive {
+    color: #00aa00; /* Light green for positive numbers */
+}
+
+td.negative {
+    color: #ff5555; /* Light red for negative numbers */
 }
 
 /* Add styles for pagination if needed */
