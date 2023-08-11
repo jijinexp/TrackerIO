@@ -14,6 +14,16 @@ builder.Services.AddSwaggerGen();
 builder.AddDatabase();
 builder.Services.AddTrackerServices();
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowReactApp",
+        corsPolicyBuilder => corsPolicyBuilder
+            .WithOrigins("http://localhost:3000") // Replace with your React app's URL
+            .AllowAnyMethod()
+            .AllowAnyHeader()
+    );
+});
+
 
 var app = builder.Build();
 
@@ -37,5 +47,8 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.UseCors("AllowReactApp");
+app.UseCors("AllowReactApp");
 
 app.Run();

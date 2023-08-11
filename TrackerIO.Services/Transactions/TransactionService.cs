@@ -15,9 +15,12 @@ public class TransactionService : ITransactionService
     
     public ServiceResponse<TransactionResponse> GetRawTransactions(DateRange dateRange)
     {
+        
+        
         var transactions = _context.Transactions?
             .AsNoTracking()
-            .Where(a => a.Date >= dateRange.StartDate && a.Date <= dateRange.EndDate).ToList();
+            // .Where(a => a.Date >= dateRange.StartDate && a.Date <= dateRange.EndDate)
+            .ToList();
         var response = new TransactionResponse
         {
             RawTransactions = new List<Transaction>() 
@@ -30,19 +33,16 @@ public class TransactionService : ITransactionService
     {
         var fromTransaction = _context.Transactions?.FirstOrDefault(x => x.Id == fromId);
         var toTransaction = _context.Transactions?.FirstOrDefault(x => x.Id == toId);
-        if (fromTransaction is not null && toTransaction is not null)
-        {
-            toTransaction.Date = fromTransaction.Date;
-            toTransaction.Amount = fromTransaction.Amount;
-            toTransaction.Description = fromTransaction.Description;
-            toTransaction.Type = fromTransaction.Type;
-            _context.Transactions?.Update(toTransaction);
-            _context.Transactions?.Remove(fromTransaction);
-            _context.SaveChanges();
-            return new ServiceResponse<TransactionService>().Success($"{fromTransaction.Description} merged with {toTransaction.Description}");
-        }
-
-        return new ServiceResponse<TransactionService>().BadRequest($"Invalid merge");
+        if (fromTransaction is null || toTransaction is null)
+            return new ServiceResponse<TransactionService>().BadRequest($"Invalid merge");
+        toTransaction.Date = fromTransaction.Date;
+        toTransaction.Amount = fromTransaction.Amount;
+        toTransaction.Description = fromTransaction.Description;
+        toTransaction.Type = fromTransaction.Type;
+        _context.Transactions?.Update(toTransaction);
+        _context.Transactions?.Remove(fromTransaction);
+        _context.SaveChanges();
+        return new ServiceResponse<TransactionService>().Success($"{fromTransaction.Description} merged with {toTransaction.Description}");
 
     }
 }
