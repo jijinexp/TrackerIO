@@ -6,15 +6,15 @@ import {Route, Routes} from "react-router-dom";
 import Home from "./Pages/Home/Home";
 
 function App() {
-  return (
-    <>
-        <Navbar />
-        <Routes>
-            <Route path="/" element={<Home/>}/>
-            <Route path="/transactions" element={<ListTransactions />}/>
-        </Routes>
-    </>
-  );
+    return (
+        <>
+            <Navbar/>
+            <Routes>
+                <Route path="/" element={<Home/>}/>
+                <Route path="/transactions" element={<ListTransactions/>}/>
+            </Routes>
+        </>
+    );
 }
 
 export default App;

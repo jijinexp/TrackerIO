@@ -15,7 +15,7 @@ public class TransactionController : Controller
         _uploadService = uploadService;
         _transactionService = transactionService;
     }
-    
+
     [HttpPut]
     [Route(ApiRoutes.UploadFile)]
     public IActionResult Upload(IFormFile? file)
@@ -38,12 +38,22 @@ public class TransactionController : Controller
         var response = _transactionService.GetRawTransactions(dateRange);
         if (response.IsSuccess())
             return Ok(response.Content);
-        return BadRequest(response.Message); 
+        return BadRequest(response.Message);
+    }
+
+    [HttpGet]
+    [Route(ApiRoutes.Expense)]
+    public IActionResult GetExpense([FromQuery] DateRange dateRange)
+    {
+        var response = _transactionService.GetExpense(dateRange);
+        if (response.IsSuccess())
+            return Ok(response.Content);
+        return BadRequest(response.Message);
     }
 
     [HttpPost]
     [Route(ApiRoutes.MergeTransactions)]
-    public IActionResult MergeTransactions([FromQuery] Guid fromId,[FromQuery] Guid toId)
+    public IActionResult MergeTransactions([FromQuery] Guid fromId, [FromQuery] Guid toId)
     {
         var response = _transactionService.MergeTransactions(fromId, toId);
         if (response.IsSuccess())

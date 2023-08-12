@@ -14,16 +14,45 @@ interface Transaction {
     selected: boolean
 }
 
-function ListTransactions(){
+function ListTransactions() {
     const itemsPerPage = 20; // Number of items per page
     const [currentPage, setCurrentPage] = useState(1);
     const [headers, setHeaders] = useState<string[]>([]);
     const [items, setItems] = useState<Transaction[]>([]);
+    const [fromDate, setFromDate] = useState('');
+    const [toDate, setToDate] = useState('');
+    // Calculate default date range for start of month till now
+    const currentDate = new Date();
+    const startOfMonthDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+    const defaultFromDate = startOfMonthDate.toISOString().substring(0, 10);
+    const defaultToDate = currentDate.toISOString().substring(0, 10);
     const [data, setData] = useState<Transaction[]>([]);
 
     useEffect(() => {
+        const fetchItems = async () => {
+            try {
+                await axios.get('http://localhost:5251/api/transactions', {
+                    params: {
+                        startDate: fromDate || defaultFromDate,
+                        endDate: toDate || defaultToDate
+                    }
+                }).then(response => {
+                    const {rawTransactions} = response.data;
+                    setItems(rawTransactions);
+                    if (rawTransactions && rawTransactions.length > 0) {
+                        // Filter out specific header names you don't need
+                        const excludedHeaders = ['id', 'csvId'];
+                        const filtered = Object.keys(rawTransactions[0])
+                            .filter(header => !excludedHeaders.includes(header));
+                        setHeaders(filtered);
+                    }
+                });
+            } catch (error) {
+                console.error('Error fetching items:', error)
+            }
+        };
         fetchItems().then();
-    }, []);
+    }, [defaultFromDate, defaultToDate, fromDate, toDate]);
 
     // Calculate the start and end indices of the current page's data
     const startIndex = (currentPage - 1) * itemsPerPage;
@@ -34,37 +63,36 @@ function ListTransactions(){
     // Calculate the total number of pages
     const totalPages = Math.ceil(items.length / itemsPerPage);
 
-    const fetchItems = async () =>{
-        try {
-            await axios.get('http://localhost:5251/api/transactions').then(response =>
-            {
-                const {rawTransactions} = response.data;
-                setItems(rawTransactions);
-                if (rawTransactions && rawTransactions.length > 0) {
-                    // Filter out specific header names you don't need
-                    const excludedHeaders = ['id','csvId'];
-                    const filtered = Object.keys(rawTransactions[0])
-                        .filter(header => !excludedHeaders.includes(header));
-                    setHeaders(filtered);
-                }
-            });
-        }catch (error) {
-            console.error('Error fetching items:', error)
-        }
-    };
-
     const handleCheckboxChange = (id: string) => {
         // Update the state to reflect checkbox changes
         setData(items => items.map(record => {
             if (record.id === id) {
-                return { ...record, selected: !record.selected};
+                return {...record, selected: !record.selected};
             }
             return record;
         }));
     };
 
-    return(
+    return (
         <div className="table-container">
+            <div>
+                <label htmlFor="fromDate">From Date:</label>
+                <input
+                    type="date"
+                    id="fromDate"
+                    value={fromDate}
+                    onChange={(e) => setFromDate(e.target.value)}
+                />
+            </div>
+            <div>
+                <label htmlFor="toDate">To Date:</label>
+                <input
+                    type="date"
+                    id="toDate"
+                    value={toDate}
+                    onChange={(e) => setToDate(e.target.value)}
+                />
+            </div>
             <table>
                 <thead>
                 <tr>
@@ -88,7 +116,7 @@ function ListTransactions(){
                         <td>{row.description}</td>
                         <td>{row.type}</td>
                         <td>{row.bank}</td>
-                        <td className={row.amount > 0 ? 'positive' : 'negative' }>${row.amount}</td>
+                        <td className={row.amount > 0 ? 'positive' : 'negative'}>${row.amount}</td>
                     </tr>
                 ))}
                 </tbody>
@@ -96,10 +124,10 @@ function ListTransactions(){
             {/* Pagination controls */}
             <div className="pagination">
                 <button onClick={() => setCurrentPage(currentPage - 1)}
-                    disabled={currentPage === 1}>
+                        disabled={currentPage === 1}>
                     Previous
                 </button>
-                {Array.from({ length: totalPages }, (_, index) => (
+                {Array.from({length: totalPages}, (_, index) => (
                     <button
                         key={index}
                         onClick={() => setCurrentPage(index + 1)}
@@ -108,7 +136,7 @@ function ListTransactions(){
                     </button>
                 ))}
                 <button onClick={() => setCurrentPage(currentPage + 1)}
-                    disabled={endIndex >= items.length}>
+                        disabled={endIndex >= items.length}>
                     Next
                 </button>
             </div>

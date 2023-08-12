@@ -25,13 +25,23 @@ public class CsvUploadService : IUploadService
         try
         {
             var csvBytes = _fileService.ConvertToBytes(file);
-            _fileService.CreateUploadFile(new UploadFile
+
+            var toUploadFile = new UploadFile
             {
                 FileName = Path.GetFileName(fileName),
                 FileExtension = Path.GetExtension(fileName),
                 FileSize = file?.Length,
                 FileContent = csvBytes
-            });
+            };
+
+            if (toUploadFile.FileExtension != ".csv")
+            {
+                return new ServiceResponse<CsvUploadService>()
+                    .BadRequest($"Unsupported file format {toUploadFile.FileExtension}. Please upload a CSV file");
+            }
+            
+            
+            _fileService.CreateUploadFile(toUploadFile);
             
             using var memoryStream = new MemoryStream(csvBytes);
             using var streamReader = new StreamReader(memoryStream);
