@@ -60,4 +60,14 @@ public class TransactionController : Controller
             return Ok(response.Content);
         return BadRequest(response.Message);
     }
+    
+    [HttpDelete]
+    [Route(ApiRoutes.RemoveTransactionsById)]
+    public IActionResult RemoveTransactions([FromBody] string[] ids)
+    {
+        var response = _transactionService.RemoveTransactions(ids);
+        if (response.IsSuccess())
+            return Ok(response.Content);
+        return BadRequest(response.Message);
+    }
 }

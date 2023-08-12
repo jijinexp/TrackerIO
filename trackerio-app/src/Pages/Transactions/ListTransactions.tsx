@@ -10,8 +10,7 @@ interface Transaction {
     description: string,
     type: string,
     bank: string,
-    amount: number,
-    selected: boolean
+    amount: number
 }
 
 function ListTransactions() {
@@ -26,7 +25,7 @@ function ListTransactions() {
     const startOfMonthDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
     const defaultFromDate = startOfMonthDate.toISOString().substring(0, 10);
     const defaultToDate = currentDate.toISOString().substring(0, 10);
-    const [data, setData] = useState<Transaction[]>([]);
+    const [ids, setids] = useState<string[]>([]);
 
     useEffect(() => {
         const fetchItems = async () => {
@@ -54,6 +53,30 @@ function ListTransactions() {
         fetchItems().then();
     }, [defaultFromDate, defaultToDate, fromDate, toDate]);
 
+    const handleSelect = (id: string) => {
+        if (ids.includes(id)) {
+            setids(ids.filter(selectedId => selectedId !== id));
+        } else {
+            setids([...ids, id]);
+        }
+    };
+
+    const handleSendIds = async () => {
+        try {
+            const response = await axios.delete('http://localhost:5251/api/remove-transactions',
+                {
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    data: ids
+                });
+            console.log('IDs sent successfully:', response.data);
+        } catch (error) {
+            console.error('Error sending IDs:', error);
+        }
+    };
+
+
     // Calculate the start and end indices of the current page's data
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
@@ -63,15 +86,6 @@ function ListTransactions() {
     // Calculate the total number of pages
     const totalPages = Math.ceil(items.length / itemsPerPage);
 
-    const handleCheckboxChange = (id: string) => {
-        // Update the state to reflect checkbox changes
-        setData(items => items.map(record => {
-            if (record.id === id) {
-                return {...record, selected: !record.selected};
-            }
-            return record;
-        }));
-    };
 
     return (
         <div className="table-container">
@@ -103,13 +117,13 @@ function ListTransactions() {
                 </tr>
                 </thead>
                 <tbody>
-                {displayedData.map((row, index) => (
+                {displayedData.map((row: Transaction, index: number) => (
                     <tr key={row.id}>
                         <td>
                             <input
                                 type="checkbox"
-                                checked={row.selected}
-                                onChange={() => handleCheckboxChange(row.id)}
+                                checked={ids.includes(row.id)}
+                                onChange={() => handleSelect(row.id)}
                             />
                         </td>
                         <td>{new Date(row.date).toLocaleDateString('en-NZ')}</td>
@@ -121,6 +135,10 @@ function ListTransactions() {
                 ))}
                 </tbody>
             </table>
+            <div>
+                <p>Selected records: {ids.length}</p>
+                <button onClick={handleSendIds}>Send Selected IDs</button>
+            </div>
             {/* Pagination controls */}
             <div className="pagination">
                 <button onClick={() => setCurrentPage(currentPage - 1)}

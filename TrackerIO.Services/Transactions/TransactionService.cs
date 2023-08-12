@@ -46,6 +46,22 @@ public class TransactionService : ITransactionService
         return new ServiceResponse<ExpenseResponse>().Success(response);
     }
 
+    public ServiceResponse<TransactionService> RemoveTransactions(string[] transactionIds)
+    {
+        if (transactionIds.Length == 0) return new ServiceResponse<TransactionService>().BadRequest("No ids provided");
+        transactionIds = transactionIds.Select(s => s.ToUpper()).ToArray();
+        
+        var transactions = _context.Transactions?
+            .Where(a => !string.IsNullOrWhiteSpace(a.Id.ToString()) && transactionIds.Contains(a.Id.ToString().ToUpper())).ToList();
+        
+        if (transactions is null) return new ServiceResponse<TransactionService>().Success("Removed no records");
+            
+        _context.Transactions?.RemoveRange(transactions);
+        _context.SaveChanges();
+        return new ServiceResponse<TransactionService>().Success("Removed");
+
+    }
+
     public ServiceResponse<TransactionService> MergeTransactions(Guid fromId, Guid toId)
     {
         var fromTransaction = _context.Transactions?.FirstOrDefault(x => x.Id == fromId);

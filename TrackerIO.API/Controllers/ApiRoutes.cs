@@ -7,4 +7,5 @@ public static class ApiRoutes
     public const string Transactions = Api + "/transactions";
     public const string Expense = Api + "/expense";
     public const string MergeTransactions = Api + "/merge";
+    public const string RemoveTransactionsById = Api + "/remove-transactions";
 }
