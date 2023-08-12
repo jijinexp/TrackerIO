@@ -1,14 +1,19 @@
 import React from 'react';
 import './App.css';
 import Navbar from "./Navigation/Navbar";
-import ListTransactions from "./Transactions/ListTransactions";
+import ListTransactions from "./Pages/Transactions/ListTransactions";
+import {Route, Routes} from "react-router-dom";
+import Home from "./Pages/Home/Home";
 
 function App() {
   return (
-    <div className="App">
-       <Navbar/>
-       <ListTransactions />
-    </div>
+    <>
+        <Navbar />
+        <Routes>
+            <Route path="/" element={<Home/>}/>
+            <Route path="/transactions" element={<ListTransactions />}/>
+        </Routes>
+    </>
   );
 }
 

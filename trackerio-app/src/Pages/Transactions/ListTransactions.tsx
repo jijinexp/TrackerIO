@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import axios from "axios";
-import '../App.css';
-import '../css/Table.css'
+import '../../App.css';
+import '../../css/Table.css'
 
 interface Transaction {
     id: string,
