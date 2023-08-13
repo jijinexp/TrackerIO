@@ -11,6 +11,8 @@
     justify-content: center;
     padding: 20px; /* Add padding to the whole container */
     min-height: 100vh; /* Ensure the container takes at least the full viewport height */
+    max-height: 300px; /* Adjust as needed */
+    overflow-y: auto;
 }
 
 table {
@@ -18,6 +20,21 @@ table {
     width: 50%;
     margin: 0 auto;
 }
+
+.data-table {
+    width: 80%;
+    table-layout: fixed;
+    border-collapse: collapse;
+}
+
+.data-table th,
+.data-table td {
+    width: 33.33%; /* Divide the width equally among columns */
+    text-align: center;
+    padding: 8px;
+    border: 1px solid #ccc;
+}
+
 
 /* Row styles */
 table tbody tr {

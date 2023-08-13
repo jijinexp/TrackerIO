@@ -14,18 +14,22 @@ interface Transaction {
 }
 
 function ListTransactions() {
+    const emptyString: string = '';
     const itemsPerPage = 20; // Number of items per page
     const [currentPage, setCurrentPage] = useState(1);
     const [headers, setHeaders] = useState<string[]>([]);
     const [items, setItems] = useState<Transaction[]>([]);
-    const [fromDate, setFromDate] = useState('');
-    const [toDate, setToDate] = useState('');
+    const [fromDate, setFromDate] = useState(emptyString);
+    const [toDate, setToDate] = useState(emptyString);
+
     // Calculate default date range for start of month till now
     const currentDate = new Date();
     const startOfMonthDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
     const defaultFromDate = startOfMonthDate.toISOString().substring(0, 10);
     const defaultToDate = currentDate.toISOString().substring(0, 10);
-    const [ids, setids] = useState<string[]>([]);
+    const [ids, setIds] = useState<string[]>([]);
+    const [selectedDate, setSelectedDate] = useState(emptyString);
+
 
     useEffect(() => {
         const fetchItems = async () => {
@@ -55,9 +59,9 @@ function ListTransactions() {
 
     const handleSelect = (id: string) => {
         if (ids.includes(id)) {
-            setids(ids.filter(selectedId => selectedId !== id));
+            setIds(ids.filter(selectedId => selectedId !== id));
         } else {
-            setids([...ids, id]);
+            setIds([...ids, id]);
         }
     };
 
@@ -76,15 +80,24 @@ function ListTransactions() {
         }
     };
 
+    const handleDateChange = (e: React.SetStateAction<any>) => {
+        setSelectedDate(e.target.value);
+    };
+
 
     // Calculate the start and end indices of the current page's data
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
 
-    const displayedData = items.slice(startIndex, endIndex);
+    const displayedData = selectedDate
+        ? items.filter((item) => item.date === selectedDate) : items;
+
+    const currentItems = displayedData.slice(startIndex, endIndex);
 
     // Calculate the total number of pages
-    const totalPages = Math.ceil(items.length / itemsPerPage);
+    const totalPages = Math.ceil(displayedData.length / itemsPerPage);
+    const canGoNext = currentPage < totalPages;
+    const canGoPrev = currentPage > 1;
 
 
     return (
@@ -107,8 +120,21 @@ function ListTransactions() {
                     onChange={(e) => setToDate(e.target.value)}
                 />
             </div>
-            <table>
+            <table className="data-table">
                 <thead>
+                <tr>
+                    <th colSpan={headers.length + 1} className="filter-header">
+                        <div className="filter-container">
+                            <label htmlFor="date-filter">Filter by Date:</label>
+                            <input
+                                type="date"
+                                id="date-filter"
+                                value={selectedDate}
+                                onChange={handleDateChange}
+                            />
+                        </div>
+                    </th>
+                </tr>
                 <tr>
                     <th>Select</th>
                     {headers.map((header, index) => (
@@ -117,47 +143,56 @@ function ListTransactions() {
                 </tr>
                 </thead>
                 <tbody>
-                {displayedData.map((row: Transaction, index: number) => (
-                    <tr key={row.id}>
-                        <td>
-                            <input
-                                type="checkbox"
-                                checked={ids.includes(row.id)}
-                                onChange={() => handleSelect(row.id)}
-                            />
-                        </td>
-                        <td>{new Date(row.date).toLocaleDateString('en-NZ')}</td>
-                        <td>{row.description}</td>
-                        <td>{row.type}</td>
-                        <td>{row.bank}</td>
-                        <td className={row.amount > 0 ? 'positive' : 'negative'}>${row.amount}</td>
+                {currentItems.length > 0 ? (currentItems
+                    .map((row: Transaction, _: number) => (
+                        <tr key={row.id}>
+                            <td>
+                                <input
+                                    type="checkbox"
+                                    checked={ids.includes(row.id)}
+                                    onChange={() => handleSelect(row.id)}
+                                />
+                            </td>
+                            <td>{new Date(row.date).toLocaleDateString('en-NZ')}</td>
+                            <td>{row.description}</td>
+                            <td>{row.type}</td>
+                            <td>{row.bank}</td>
+                            <td className={row.amount > 0 ? 'positive' : 'negative'}>${row.amount}</td>
+                        </tr>
+                    ))) : (
+                    <tr>
+                        <td colSpan={headers.length + 1}>No records to show</td>
                     </tr>
-                ))}
+                )}
+                <tr>
+                    <td colSpan={headers.length + 1} className="bottom-button">
+                        <p>Selected records: {ids.length}</p>
+                        <button onClick={handleSendIds}>Send Selected IDs</button>
+                    </td>
+                </tr>
                 </tbody>
             </table>
-            <div>
-                <p>Selected records: {ids.length}</p>
-                <button onClick={handleSendIds}>Send Selected IDs</button>
-            </div>
             {/* Pagination controls */}
-            <div className="pagination">
-                <button onClick={() => setCurrentPage(currentPage - 1)}
-                        disabled={currentPage === 1}>
-                    Previous
-                </button>
-                {Array.from({length: totalPages}, (_, index) => (
-                    <button
-                        key={index}
-                        onClick={() => setCurrentPage(index + 1)}
-                        className={currentPage === index + 1 ? 'active' : ''}>
-                        {index + 1}
+            {currentItems.length > 0 && (
+                <div className="pagination">
+                    <button onClick={() => setCurrentPage(currentPage - 1)}
+                            disabled={!canGoPrev}>
+                        Previous
                     </button>
-                ))}
-                <button onClick={() => setCurrentPage(currentPage + 1)}
-                        disabled={endIndex >= items.length}>
-                    Next
-                </button>
-            </div>
+                    {Array.from({length: totalPages}, (_, index) => (
+                        <button
+                            key={index}
+                            onClick={() => setCurrentPage(index + 1)}
+                            className={currentPage === index + 1 ? 'active' : ''}>
+                            {index + 1}
+                        </button>
+                    ))}
+                    <button onClick={() => setCurrentPage(currentPage + 1)}
+                            disabled={!canGoNext}>
+                        Next
+                    </button>
+                </div>
+            )}
         </div>
     );
 }

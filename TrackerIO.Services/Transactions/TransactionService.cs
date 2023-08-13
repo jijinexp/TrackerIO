@@ -40,7 +40,7 @@ public class TransactionService : ITransactionService
 
         var response = new ExpenseResponse
         {
-            Total = total.GetValueOrDefault()
+            ExpenseTotal = total.GetValueOrDefault()
         };
 
         return new ServiceResponse<ExpenseResponse>().Success(response);

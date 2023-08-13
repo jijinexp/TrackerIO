@@ -9,5 +9,9 @@ public class TransactionResponse
 
 public class ExpenseResponse
 {
-    public decimal Total { get; init; }
+    public decimal FixedTotal { get; init; }
+    
+    public decimal VariableTotal { get; init; }
+    public decimal ExpenseTotal { get; init; }
+    public decimal EarningsTotal { get; init; }
 }

@@ -32,7 +32,7 @@ const ExpensesContainer = () => {
 
     return (
         <div>
-            <h1>Expenses Till Date</h1>
+            <h1>Expenses from {startOfMonthDate.toDateString()} to {currentDate.toDateString()}</h1>
             <p>Total Expenses: ${totalExpense.toFixed(2)}</p>
         </div>
     );
