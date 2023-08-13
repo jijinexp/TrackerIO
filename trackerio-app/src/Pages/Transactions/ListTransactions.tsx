@@ -17,6 +17,7 @@ function ListTransactions() {
     const emptyString: string = '';
     const itemsPerPage = 20; // Number of items per page
     const [currentPage, setCurrentPage] = useState(1);
+    const [checkedItemCount, setItemCount] = useState(0);
     const [headers, setHeaders] = useState<string[]>([]);
     const [items, setItems] = useState<Transaction[]>([]);
     const [fromDate, setFromDate] = useState(emptyString);
@@ -74,6 +75,11 @@ function ListTransactions() {
                     },
                     data: ids
                 });
+
+                const updatedData = currentItems.filter((row) => !ids.includes(row.id));
+                const checkedItemCount = updatedData.length > 0 ? updatedData.length : 0;
+                setItems(updatedData);
+                setItemCount(checkedItemCount);
             console.log('IDs sent successfully:', response.data);
         } catch (error) {
             console.error('Error sending IDs:', error);
