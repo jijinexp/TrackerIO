@@ -32,15 +32,22 @@ public class TransactionService : ITransactionService
     {
         var transactions = _context.Transactions?
             .AsNoTracking()
-            .Where(a => (a.Date >= dateRange.StartDate && a.Date <= dateRange.EndDate)
-                        && a.Amount < 0).OrderBy(a => a.Date).Select(a => a.Amount)
+            .Where(a => (a.Date >= dateRange.StartDate && a.Date <= dateRange.EndDate))
+            .OrderBy(a => a.Date)
             .ToList();
 
-        var total = transactions?.Sum(a => a);
+        var totalExpenses = transactions?
+            .Where(a => a.Amount < 0)
+            .Sum(a => a.Amount);
+
+        var totalEarnings = transactions?
+            .Where(a => a.Amount > 0)
+            .Sum(a => a.Amount);
 
         var response = new ExpenseResponse
         {
-            ExpenseTotal = total.GetValueOrDefault()
+            ExpenseTotal = totalExpenses.GetValueOrDefault(),
+            EarningsTotal = totalEarnings.GetValueOrDefault()
         };
 
         return new ServiceResponse<ExpenseResponse>().Success(response);
