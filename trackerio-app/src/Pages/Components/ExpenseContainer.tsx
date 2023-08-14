@@ -3,6 +3,7 @@ import axios from 'axios';
 
 const ExpensesContainer = () => {
     const [totalExpense, setTotalExpense] = useState<number>(0);
+    const [totalEarnings, setTotalEarnings] = useState<number>(0);
     const currentDate = new Date();
     const startOfMonthDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
     const defaultFromDate = startOfMonthDate.toISOString().substring(0, 10);
@@ -18,8 +19,10 @@ const ExpensesContainer = () => {
                         }
                     })
                         .then(response => {
-                            const total: number = response.data.total;
-                            setTotalExpense(total);
+                            const totalExp: number = response.data.expenseTotal;
+                            const totalEarn: number = response.data.earningsTotal;
+                            setTotalExpense(totalExp);
+                            setTotalEarnings(totalEarn)
                         });
                 } catch (error) {
                     console.error('Error fetching expenses:', error);
@@ -34,6 +37,7 @@ const ExpensesContainer = () => {
         <div>
             <h1>Expenses from {startOfMonthDate.toDateString()} to {currentDate.toDateString()}</h1>
             <p>Total Expenses: ${totalExpense.toFixed(2)}</p>
+            <p>Total Earnings: ${totalEarnings.toFixed(2)}</p>
         </div>
     );
 };
