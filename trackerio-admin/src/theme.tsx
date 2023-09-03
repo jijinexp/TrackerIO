@@ -2,28 +2,29 @@ import {createContext, useMemo, useState} from "react";
 import {createTheme} from "@mui/material/styles";
 import {PaletteMode, Theme, ThemeOptions} from "@mui/material";
 
-export interface Colours{
-    Grey:ColourTokens,
-    Primary:ColourTokens,
-    RedAccent:ColourTokens,
-    GreenAccent:ColourTokens,
-    BlueAccent:ColourTokens
+export interface Colours {
+    Grey: ColourTokens,
+    Primary: ColourTokens,
+    RedAccent: ColourTokens,
+    GreenAccent: ColourTokens,
+    BlueAccent: ColourTokens
 }
+
 interface ColourTokens {
-    CT100: string;
-    CT200: string;
-    CT300: string;
-    CT400: string;
-    CT500: string;
-    CT600: string;
-    CT700: string;
-    CT800: string;
-    CT900: string;
+    CT100: string,
+    CT200: string,
+    CT300: string,
+    CT400: string,
+    CT500: string,
+    CT600: string,
+    CT700: string,
+    CT800: string,
+    CT900: string,
 }
 
 
 // color design tokens export
-export const tokens = (mode: string):Colours => {
+export const tokens = (mode: string): Colours => {
     const darkModeTokens: Colours = {
         Grey: getToken(
             "#e0e0e0",
@@ -142,23 +143,23 @@ export const tokens = (mode: string):Colours => {
     }
 };
 
-function getToken(C100:string,C200:string,C300:string,C400:string,C500:string,C600:string,
-                  C700:string,C800:string,C900:string):ColourTokens {
+function getToken(C100: string, C200: string, C300: string, C400: string, C500: string, C600: string,
+                  C700: string, C800: string, C900: string): ColourTokens {
     return {
-      CT100: C100,
-      CT200: C200,
-      CT300: C300,
-      CT400: C400,
-      CT500: C500,
-      CT600: C600,
-      CT700: C700,
-      CT800: C800,
-      CT900: C900
-  };
+        CT100: C100,
+        CT200: C200,
+        CT300: C300,
+        CT400: C400,
+        CT500: C500,
+        CT600: C600,
+        CT700: C700,
+        CT800: C800,
+        CT900: C900
+    };
 }
 
 // context for color mode
-export const themeSettings = (mode : PaletteMode) : ThemeOptions => {
+export const themeSettings = (mode: PaletteMode): ThemeOptions => {
     const colors = tokens(mode);
     return {
         palette: {
@@ -232,10 +233,11 @@ export const themeSettings = (mode : PaletteMode) : ThemeOptions => {
 
 // context for color mode
 export const ColorModeContext = createContext({
-    toggleColorMode: () => {},
+    toggleColorMode: () => {
+    },
 });
 
-export const useMode = ():[Theme,{toggleColorMode:()=> void} ] => {
+export const useMode = (): [Theme, { toggleColorMode: () => void }] => {
     const [mode, setMode] = useState<PaletteMode>("dark");
 
     const colorMode = useMemo(
