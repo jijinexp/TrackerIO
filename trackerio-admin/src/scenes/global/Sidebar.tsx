@@ -139,7 +139,7 @@ const Sidebar = () => {
                             Data
                         </Typography>
                         <Item
-                            title="Contacts Information"
+                            title="Upload Information"
                             to="/contacts"
                             icon={<ContactsOutlinedIcon />}
                             selected={selected}

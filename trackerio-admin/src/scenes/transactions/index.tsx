@@ -1,49 +1,68 @@
-import { Box, Typography, useTheme } from "@mui/material";
-import { DataGrid } from "@mui/x-data-grid";
-import { tokens } from "../../theme";
+import {Box, Typography, useTheme} from "@mui/material";
+import {DataGrid, GridColDef, GridCellParams} from "@mui/x-data-grid";
+import {tokens} from "../../theme";
 import Header from "../../components/Header";
+import {Transaction} from "./Transaction";
+import {useEffect, useState} from "react";
+import axios from "axios";
 
 const Transactions = () => {
     const theme = useTheme();
-    const colors = tokens(theme.palette.mode);
-    const columns = [
-        { field: "id", headerName: "ID" },
-        {
-            field: "name",
-            headerName: "Name",
-            flex: 1,
-            cellClassName: "name-column--cell",
-        },
-        {
-            field: "phone",
-            headerName: "Phone Number",
-            flex: 1,
-        },
-        {
-            field: "email",
-            headerName: "Email",
-            flex: 1,
-        },
-        {
-            field: "cost",
-            headerName: "Cost",
-            flex: 1,
-            renderCell: (params: any) => (
-                <Typography color={colors.GreenAccent.CT500}>
-                    ${params.row.cost}
-                </Typography>
-            ),
-        },
-        {
-            field: "date",
-            headerName: "Date",
-            flex: 1,
-        },
-    ];
+    const colours = tokens(theme.palette.mode);
+    const [headers, setHeaders] = useState<string[]>([]);
+    const [items, setItems] = useState<Transaction[]>([]);
+
+    const currentDate = new Date();
+    const startOfMonthDate = new Date(currentDate.getFullYear(), currentDate.getMonth() - 2, 1);
+    const defaultFromDate = startOfMonthDate.toISOString().substring(0, 10);
+    const defaultToDate = currentDate.toISOString().substring(0, 10);
+    useEffect(() => {
+        const fetchItems = async () => {
+            try {
+                await axios.get('http://localhost:5251/api/transactions', {
+                    params: {
+                        startDate: defaultFromDate,
+                        endDate: defaultToDate
+                    }
+                }).then(response => {
+                    const {rawTransactions} = response.data;
+                    setItems(rawTransactions);
+                    if (rawTransactions && rawTransactions.length > 0) {
+                        // Filter out specific header names you don't need
+                        const excludedHeaders = ['id', 'csvId'];
+                        const transactionHeaders = Object.keys(rawTransactions[0])
+                            .filter(header => !excludedHeaders.includes(header));
+                        setHeaders(transactionHeaders);
+                    }
+                });
+            } catch (error) {
+                console.error('Error fetching items:', error)
+            }
+        };
+        fetchItems().then();
+    }, [defaultFromDate, defaultToDate]);
+
+    const gridColumns: GridColDef[] = headers.map(header => ((header === "amount" ?
+            {
+                field: header,
+                headerName: header.charAt(0).toUpperCase() + header.slice(1),
+                flex: 1,
+                renderCell: (params: GridCellParams) => (
+                    <Typography color={(params.row.amount < 0 ? colours.RedAccent.CT500 : colours.GreenAccent.CT500)}>
+                        ${params.row.amount}
+                    </Typography>
+                ),
+            } :
+            {
+                field: header,
+                headerName: header.charAt(0).toUpperCase() + header.slice(1),
+                flex: 1,
+            }
+    )));
 
     return (
         <Box m="20px">
-            <Header title="TRANSACTIONS" subtitle="List of Statement transactions" />
+            <Header title="TRANSACTIONS" subtitle="List of Statement transactions"/>
             <Box
                 m="40px 0 0 0"
                 height="75vh"
@@ -55,27 +74,29 @@ const Transactions = () => {
                         borderBottom: "none",
                     },
                     "& .name-column--cell": {
-                        color: colors.GreenAccent.CT300,
+                        color: colours.GreenAccent.CT300,
                     },
                     "& .MuiDataGrid-columnHeaders": {
-                        backgroundColor: colors.BlueAccent.CT700,
+                        backgroundColor: colours.BlueAccent.CT700,
                         borderBottom: "none",
                     },
                     "& .MuiDataGrid-virtualScroller": {
-                        backgroundColor: colors.Primary.CT400,
+                        backgroundColor: colours.Primary.CT400,
                     },
                     "& .MuiDataGrid-footerContainer": {
                         borderTop: "none",
-                        backgroundColor: colors.BlueAccent.CT700,
+                        backgroundColor: colours.BlueAccent.CT700,
                     },
                     "& .MuiCheckbox-root": {
-                        color: `${colors.GreenAccent.CT200} !important`,
+                        color: `${colours.GreenAccent.CT200} !important`,
                     },
                 }}
             >
+                <DataGrid checkboxSelection rows={items} columns={gridColumns}/>
             </Box>
         </Box>
     );
 };
+
 
 export default Transactions;
