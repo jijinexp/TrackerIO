@@ -5,6 +5,7 @@ import TopBar from "./scenes/global/TopBar";
 import Sidebar from "./scenes/global/Sidebar";
 import Dashboard from "./scenes/dashboard";
 import Transactions from "./scenes/transactions";
+import UploadInformation from "./scenes/uploadinformation";
 
 function App() {
     const [theme, colourMode] = useMode();
@@ -18,6 +19,7 @@ function App() {
                         <Routes>
                             <Route path="/" element={<Dashboard />} />
                             <Route path="/transactions" element={<Transactions />} />
+                            <Route path="/uploadinformation" element={<UploadInformation />} />
                         </Routes>
                     </main>
                 </div>

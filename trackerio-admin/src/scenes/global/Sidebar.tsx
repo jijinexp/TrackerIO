@@ -5,7 +5,6 @@ import { Link } from "react-router-dom";
 import "react-pro-sidebar/dist/css/styles.css";
 import { tokens } from "../../theme";
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
-import ContactsOutlinedIcon from "@mui/icons-material/ContactsOutlined";
 import ReceiptOutlinedIcon from "@mui/icons-material/ReceiptOutlined";
 import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
 import CalendarTodayOutlinedIcon from "@mui/icons-material/CalendarTodayOutlined";
@@ -13,6 +12,7 @@ import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 import BarChartOutlinedIcon from "@mui/icons-material/BarChartOutlined";
 import TimelineOutlinedIcon from "@mui/icons-material/TimelineOutlined";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
+import UploadInformation from "../uploadinformation";
 
 interface ItemProps{
     title: string,
@@ -140,8 +140,8 @@ const Sidebar = () => {
                         </Typography>
                         <Item
                             title="Upload Information"
-                            to="/contacts"
-                            icon={<ContactsOutlinedIcon />}
+                            to="/uploadInformation"
+                            icon={<ReceiptOutlinedIcon />}
                             selected={selected}
                             setSelected={setSelected}
                         />
