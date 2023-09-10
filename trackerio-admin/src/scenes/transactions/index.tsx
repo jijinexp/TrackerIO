@@ -7,6 +7,7 @@ import {useEffect, useState} from "react";
 import axios from "axios";
 
 const Transactions = () => {
+    const apiUrl = 'http://localhost:5251/api/transactions';
     const theme = useTheme();
     const colours = tokens(theme.palette.mode);
     const [headers, setHeaders] = useState<string[]>([]);
@@ -19,7 +20,7 @@ const Transactions = () => {
     useEffect(() => {
         const fetchItems = async () => {
             try {
-                await axios.get('http://localhost:5251/api/transactions', {
+                await axios.get(apiUrl, {
                     params: {
                         startDate: defaultFromDate,
                         endDate: defaultToDate
@@ -57,6 +58,7 @@ const Transactions = () => {
                 field: header,
                 headerName: header.charAt(0).toUpperCase() + header.slice(1),
                 flex: 1,
+                editable: true,
             }
     )));
 

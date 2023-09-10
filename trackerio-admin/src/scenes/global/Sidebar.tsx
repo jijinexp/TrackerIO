@@ -12,7 +12,7 @@ import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 import BarChartOutlinedIcon from "@mui/icons-material/BarChartOutlined";
 import TimelineOutlinedIcon from "@mui/icons-material/TimelineOutlined";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
-import UploadInformation from "../uploadinformation";
+import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 
 interface ItemProps{
     title: string,
@@ -136,17 +136,17 @@ const Sidebar = () => {
                             color={colours.Grey.CT300}
                             sx={{ m: "15px 0 5px 20px" }}
                         >
-                            Data
+                            Transactions
                         </Typography>
                         <Item
-                            title="Upload Information"
+                            title="Upload"
                             to="/uploadInformation"
-                            icon={<ReceiptOutlinedIcon />}
+                            icon={<CloudUploadIcon />}
                             selected={selected}
                             setSelected={setSelected}
                         />
                         <Item
-                            title="Transactions"
+                            title="View"
                             to="/transactions"
                             icon={<ReceiptOutlinedIcon />}
                             selected={selected}
