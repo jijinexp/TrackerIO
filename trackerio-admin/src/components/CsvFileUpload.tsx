@@ -152,8 +152,15 @@ const CsvFileUpload: React.FC<CsvFileUploadProps>  = () => {
                                 variant="contained"
                                 size="large"
                                 className={classes.buttonContainer}
+                                sx={{
+                                    backgroundColor: colours.BlueAccent.CT700,
+                                    color: colours.Grey.CT100,
+                                    fontSize: "14px",
+                                    fontWeight: "bold",
+                                    padding: "10px 20px",
+                                }}
                             >
-                                <Typography variant="h3" color={colours.Grey.CT100}>
+                                <Typography variant="h3">
                                     Browse
                                 </Typography>
                             </Button>
@@ -169,8 +176,15 @@ const CsvFileUpload: React.FC<CsvFileUploadProps>  = () => {
                                 variant="contained"
                                 onClick={handleFileCancel}
                                 disabled={!selectedFile}
+                                sx={{
+                                    backgroundColor: colours.BlueAccent.CT700,
+                                    color: colours.Grey.CT100,
+                                    fontSize: "14px",
+                                    fontWeight: "bold",
+                                    padding: "10px 20px",
+                                }}
                             >
-                                <Typography variant="h3" color={colours.Grey.CT100}>
+                                <Typography variant="h3">
                                     Cancel
                                 </Typography>
                             </Button>
@@ -178,8 +192,16 @@ const CsvFileUpload: React.FC<CsvFileUploadProps>  = () => {
                                 variant="contained"
                                 disabled={!selectedFile} /* Disable the button when upload is canceled */
                                 onClick={handleFileUpload}
-                                style={{ marginLeft: '8px' }}>
-                                <Typography variant="h3" color={colours.Grey.CT100}>
+                                style={{ marginLeft: '8px' }}
+                                sx={{
+                                    backgroundColor: colours.BlueAccent.CT700,
+                                    color: colours.Grey.CT100,
+                                    fontSize: "14px",
+                                    fontWeight: "bold",
+                                    padding: "10px 20px",
+                                }}
+                            >
+                                <Typography variant="h3">
                                     Upload
                                 </Typography>
                             </Button>
@@ -194,8 +216,15 @@ const CsvFileUpload: React.FC<CsvFileUploadProps>  = () => {
                         disabled={uploadCanceled || !selectedFile} /* Disable the button when upload is canceled */
                         onClick={toggleCollapse}
                         className={classes.showContentsButton}
+                        sx={{
+                            backgroundColor: colours.BlueAccent.CT700,
+                            color: colours.Grey.CT100,
+                            fontSize: "14px",
+                            fontWeight: "bold",
+                            padding: "10px 20px",
+                        }}
                     >
-                        <Typography variant="h3" color={colours.Grey.CT100}>
+                        <Typography variant="h3">
                             {isCollapsed ? 'Show File Contents' : 'Hide File Contents'}
                         </Typography>
                     </Button>
