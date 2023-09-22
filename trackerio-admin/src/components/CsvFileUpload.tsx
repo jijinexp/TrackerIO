@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import axios, {AxiosResponse, CancelTokenSource} from 'axios';
-import { tokens } from '../theme';
-import { useTheme } from '@mui/material';
+import {tokens} from '../theme';
+import {useTheme} from '@mui/material';
 import {
     Typography,
     Box,
@@ -16,9 +16,9 @@ import {
     TableHead,
     TableRow,
     Collapse,
-}  from '@mui/material';
+} from '@mui/material';
 import {makeStyles} from "@material-ui/core";
-import { ExpandMore as ExpandMoreIcon } from '@mui/icons-material';
+import {ExpandMore as ExpandMoreIcon} from '@mui/icons-material';
 import CsvParserService from "../services/CsvParserService";
 
 const useStyles = makeStyles((theme) => ({
@@ -60,7 +60,7 @@ interface CsvFileUploadProps {
     onCsvDataLoaded: (data: Array<Record<string, any>>) => void;
 }
 
-const CsvFileUpload: React.FC<CsvFileUploadProps>  = () => {
+const CsvFileUpload: React.FC<CsvFileUploadProps> = () => {
     const classes = useStyles();
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
     const [errorMessage, setErrorMessage] = useState<string>('');
@@ -137,123 +137,108 @@ const CsvFileUpload: React.FC<CsvFileUploadProps>  = () => {
         <div className={classes.root}>
             <Grid container className={classes.paperContainer}>
                 <Grid item xs={12}>
-                    <Paper elevation={3} style={{ padding: '16px' }} className={classes.paper}>
+                    <Paper elevation={3} style={{padding: '16px'}} className={classes.paper}>
                         <div className={classes.buttonContainer}>
-                        <Input
-                            type="file"
-                            onChange={handleFileSelect}
-                            id="file-upload-input" // Add an ID for the file input
-                            style={{ display: 'none' }} // Hide the file input
+                            <Input
+                                type="file"
+                                onChange={handleFileSelect}
+                                id="file-upload-input" // Add an ID for the file input
+                                style={{display: 'none'}} // Hide the file input
 
-                        />
-                        <label htmlFor="file-upload-input">
-                            <Button
-                                component="span" // Make the label act as a button
-                                variant="contained"
-                                size="large"
-                                className={classes.buttonContainer}
-                                sx={{
-                                    backgroundColor: colours.BlueAccent.CT700,
-                                    color: colours.Grey.CT100,
-                                    fontSize: "14px",
-                                    fontWeight: "bold",
-                                    padding: "10px 20px",
-                                }}
-                            >
-                                <Typography variant="h3">
-                                    Browse
-                                </Typography>
-                            </Button>
-                        </label>
-                        {errorMessage && <p>{errorMessage}</p>}
-                        <span className={classes.fileNameText}>
+                            />
+                            <label htmlFor="file-upload-input">
+                                <Button
+                                    component="span" // Make the label act as a button
+                                    variant="contained"
+                                    size="large"
+                                    className={classes.buttonContainer}
+                                    sx={{
+                                        backgroundColor: colours.BlueAccent.CT700,
+                                        color: colours.Grey.CT100,
+                                        fontSize: "14px",
+                                        fontWeight: "bold",
+                                        padding: "10px 20px",
+                                    }}
+                                >
+                                    <Typography variant="h3">
+                                        Browse
+                                    </Typography>
+                                </Button>
+                            </label>
+                            {errorMessage && <p>{errorMessage}</p>}
+                            <span className={classes.fileNameText}>
                             <Typography variant="h3" color={colours.Grey.CT100}>
                                  {selectedFile ? `File: ${selectedFile.name}` : 'No file selected'}
                             </Typography>
                         </span> {/* Display selected file name */}
-                        <Box className={classes.rightButtons}>
-                            <Button
-                                variant="contained"
-                                onClick={handleFileCancel}
-                                disabled={!selectedFile}
-                                sx={{
-                                    backgroundColor: colours.BlueAccent.CT700,
-                                    color: colours.Grey.CT100,
-                                    fontSize: "14px",
-                                    fontWeight: "bold",
-                                    padding: "10px 20px",
-                                }}
-                            >
-                                <Typography variant="h3">
-                                    Cancel
-                                </Typography>
-                            </Button>
-                            <Button
-                                variant="contained"
-                                disabled={!selectedFile} /* Disable the button when upload is canceled */
-                                onClick={handleFileUpload}
-                                style={{ marginLeft: '8px' }}
-                                sx={{
-                                    backgroundColor: colours.BlueAccent.CT700,
-                                    color: colours.Grey.CT100,
-                                    fontSize: "14px",
-                                    fontWeight: "bold",
-                                    padding: "10px 20px",
-                                }}
-                            >
-                                <Typography variant="h3">
-                                    Upload
-                                </Typography>
-                            </Button>
-                        </Box>
+                            <Box className={classes.rightButtons}>
+                                <Button
+                                    variant="contained"
+                                    onClick={handleFileCancel}
+                                    disabled={!selectedFile}
+                                    sx={{
+                                        backgroundColor: colours.BlueAccent.CT700,
+                                        color: colours.Grey.CT100,
+                                        fontSize: "14px",
+                                        fontWeight: "bold",
+                                        padding: "10px 20px",
+                                    }}
+                                >
+                                    <Typography variant="h3">
+                                        Cancel
+                                    </Typography>
+                                </Button>
+                                <Button
+                                    variant="contained"
+                                    disabled={!selectedFile} /* Disable the button when upload is canceled */
+                                    onClick={handleFileUpload}
+                                    style={{marginLeft: '8px'}}
+                                    sx={{
+                                        backgroundColor: colours.BlueAccent.CT700,
+                                        color: colours.Grey.CT100,
+                                        fontSize: "14px",
+                                        fontWeight: "bold",
+                                        padding: "10px 20px",
+                                    }}
+                                >
+                                    <Typography variant="h3">
+                                        Upload
+                                    </Typography>
+                                </Button>
+                            </Box>
                         </div>
                     </Paper>
                 </Grid>
                 <Grid item xs={12}>
-                    <Button
-                        variant="contained"
-                        startIcon={<ExpandMoreIcon />}
-                        disabled={uploadCanceled || !selectedFile} /* Disable the button when upload is canceled */
-                        onClick={toggleCollapse}
-                        className={classes.showContentsButton}
-                        sx={{
-                            backgroundColor: colours.BlueAccent.CT700,
-                            color: colours.Grey.CT100,
-                            fontSize: "14px",
-                            fontWeight: "bold",
-                            padding: "10px 20px",
-                        }}
-                    >
-                        <Typography variant="h3">
-                            {isCollapsed ? 'Show File Contents' : 'Hide File Contents'}
-                        </Typography>
-                    </Button>
-                    <Collapse in={!isCollapsed}>
-                        <Paper elevation={3} className={classes.paper}>
-                            {selectedFileCsvData.length > 0 && (
-                                <TableContainer>
-                                    <Table>
-                                        <TableHead>
-                                            <TableRow>
-                                                {columns.map((column) => (
-                                                    <TableCell key={column}>{column}</TableCell>
-                                                ))}
-                                            </TableRow>
-                                        </TableHead>
-                                        <TableBody>
-                                            {selectedFileCsvData.map((row, rowIndex) => (
-                                                <TableRow key={rowIndex}>
-                                                    {columns.map((column) => (
-                                                        <TableCell key={column}>{row[column]}</TableCell>
-                                                    ))}
-                                                </TableRow>
+                    <Paper sx={{
+                        backgroundColor: colours.Primary.CT400,
+                        p: 2,
+                        display: 'flex',
+                        flexDirection: 'auto',
+                        height: 375,
+                    }}
+                           elevation={3} className={classes.paper}>
+                        <TableContainer style={{overflow: 'auto'}}>
+                            <Table>
+                                <TableHead>
+                                    <TableRow>
+                                        {columns.map((column) => (
+                                            <TableCell key={column}>{column}</TableCell>
+                                        ))}
+                                    </TableRow>
+                                </TableHead>
+                                <TableBody>
+                                    {selectedFileCsvData.map((row, rowIndex) => (
+                                        <TableRow key={rowIndex}>
+                                            {columns.map((column) => (
+                                                <TableCell key={column}>{row[column]}</TableCell>
                                             ))}
-                                        </TableBody>
-                                    </Table>
-                                </TableContainer>
-                            )}
-                        </Paper>
-                    </Collapse>
+                                        </TableRow>
+                                    ))}
+                                </TableBody>
+                            </Table>
+                        </TableContainer>
+                    </Paper>
                 </Grid>
             </Grid>
         </div>

@@ -19,9 +19,8 @@ public static class ServiceExtensions
     public static void AddDatabase(this WebApplicationBuilder builder)
     {
         builder.Services.AddDbContext<TrackerDataContext>(options =>
-            options.UseSqlite(builder.Configuration.GetConnectionString("TrackerDataContextSQLite") ??
+            options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection") ??
                               throw new InvalidOperationException(
                                   $"Connection string for {nameof(TrackerDataContext)} not found.")));
-        
     }
 }

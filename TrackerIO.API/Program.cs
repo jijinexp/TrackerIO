@@ -14,6 +14,8 @@ builder.Services.AddSwaggerGen();
 builder.AddDatabase();
 builder.Services.AddTrackerServices();
 
+
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowReactApp",
@@ -34,13 +36,6 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-using (var scope = app.Services.CreateScope())
-{
-    var services = scope.ServiceProvider;
-
-    var context = services.GetRequiredService<TrackerDataContext>();
-    context.Database.EnsureCreated();
-}
 
 app.UseHttpsRedirection();
 
@@ -48,7 +43,6 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-app.UseCors("AllowReactApp");
 app.UseCors("AllowReactApp");
 
 app.Run();

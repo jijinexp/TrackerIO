@@ -10,5 +10,5 @@ public class TrackerDataContext : DbContext
     
     public DbSet<Transaction>? Transactions { get; set;}
     public DbSet<UploadFile>? Files { get; set;}
-    
+
 }

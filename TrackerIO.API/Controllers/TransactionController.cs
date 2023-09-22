@@ -50,16 +50,6 @@ public class TransactionController : Controller
             return Ok(response.Content);
         return BadRequest(response.Message);
     }
-
-    [HttpPost]
-    [Route(ApiRoutes.MergeTransactions)]
-    public IActionResult MergeTransactions([FromQuery] Guid fromId, [FromQuery] Guid toId)
-    {
-        var response = _transactionService.MergeTransactions(fromId, toId);
-        if (response.IsSuccess())
-            return Ok(response.Content);
-        return BadRequest(response.Message);
-    }
     
     [HttpDelete]
     [Route(ApiRoutes.RemoveTransactionsById)]

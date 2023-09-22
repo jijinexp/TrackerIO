@@ -15,8 +15,10 @@ public class TransactionService : ITransactionService
 
     public ServiceResponse<TransactionResponse> GetRawTransactions(DateRange dateRange)
     {
-        var transactions = _context.Transactions?
-            .AsNoTracking()
+        var transactions = _context.Transactions?.ToList();
+        
+        
+        transactions = transactions?
             .Where(a => a.Date >= dateRange.StartDate && a.Date <= dateRange.EndDate).OrderBy(a => a.Date)
             .ToList();
         var response = new TransactionResponse
@@ -67,22 +69,5 @@ public class TransactionService : ITransactionService
         _context.SaveChanges();
         return new ServiceResponse<TransactionService>().Success("Removed");
 
-    }
-
-    public ServiceResponse<TransactionService> MergeTransactions(Guid fromId, Guid toId)
-    {
-        var fromTransaction = _context.Transactions?.FirstOrDefault(x => x.Id == fromId);
-        var toTransaction = _context.Transactions?.FirstOrDefault(x => x.Id == toId);
-        if (fromTransaction is null || toTransaction is null)
-            return new ServiceResponse<TransactionService>().BadRequest($"Invalid merge");
-        toTransaction.Date = fromTransaction.Date;
-        toTransaction.Amount = fromTransaction.Amount;
-        toTransaction.Description = fromTransaction.Description;
-        toTransaction.Type = fromTransaction.Type;
-        _context.Transactions?.Update(toTransaction);
-        _context.Transactions?.Remove(fromTransaction);
-        _context.SaveChanges();
-        return new ServiceResponse<TransactionService>().Success(
-            $"{fromTransaction.Description} merged with {toTransaction.Description}");
     }
 }

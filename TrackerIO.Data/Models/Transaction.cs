@@ -7,8 +7,7 @@ public class Transaction
 {
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    public Guid Id { get; init; }
-    
+    public string Id { get; set; }
     public required string CsvId { get; set; }
     public required DateOnly Date { get; set; }
     public string? Description { get; set; }

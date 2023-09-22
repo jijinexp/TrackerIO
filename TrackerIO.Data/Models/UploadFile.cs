@@ -7,7 +7,7 @@ public class UploadFile
 {
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    public Guid Id { get; init; }
+    public string Id { get; set; }
     
     public string? FileName { get; set; }
     
@@ -15,7 +15,6 @@ public class UploadFile
     
     public long? FileSize { get; set; }
     
-    public byte[] FileContent { get; set; }
-    
+    public required byte[] FileContent { get; set; }
     public DateTime UploadTime => DateTime.Now;
 }
