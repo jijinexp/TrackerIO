@@ -31,10 +31,10 @@ public class CsvUploadService : IUploadService
                 FileName = Path.GetFileName(fileName),
                 FileExtension = Path.GetExtension(fileName),
                 FileSize = file?.Length,
-                FileContent = csvBytes
+                UploadTime = DateTime.UtcNow.ToUniversalTime()
             };
 
-            if (toUploadFile.FileExtension != ".csv")
+            if (toUploadFile.FileExtension is null or not ".csv")
             {
                 return new ServiceResponse<CsvUploadService>()
                     .BadRequest($"Unsupported file format {toUploadFile.FileExtension}. Please upload a CSV file");
