@@ -1,6 +1,4 @@
-using Microsoft.EntityFrameworkCore;
 using TrackerIO.API;
-using TrackerIO.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
