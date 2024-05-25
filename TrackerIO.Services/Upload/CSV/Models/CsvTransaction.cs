@@ -13,8 +13,8 @@ public class CsvTransaction
     public required DateOnly Date { get; set; }
     [Name("Particulars")]
     public required string TransactionName { get; set;}
-    [Name("Description")]
-    public string? Description { get; set; }
+    [Name("Payee")]
+    public string? Payee { get; set; }
     [Name("Type")]
     public required string Type { get; set; }
     public required string Bank { get; set; }

@@ -20,7 +20,7 @@ public sealed class AsbMapper : ClassMap<CsvTransaction>
                 x.Row.GetField<string>("Memo") + 
                 x.Row.GetField<string>("Payee")).GetId());
         Map(m => m.Type).Name("Tran Type");
-        Map(m => m.Description).Name("Memo");
+        Map(m => m.Payee).Name("Memo");
         Map(m => m.Date).TypeConverter(new DateOnlyConverter("yyyy/MM/dd")).Name("Date");
         Map(m => m.Amount).Name("Amount");
         Map(m => m.Bank).Default("ASB").Optional();

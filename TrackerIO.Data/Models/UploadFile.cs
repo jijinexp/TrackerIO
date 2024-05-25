@@ -7,9 +7,10 @@ public class UploadFile
 {
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    public string Id { get; set; }
+    public Guid Id { get; set; }
     public string? FileName { get; set; }
     public string? FileExtension { get; set; }
     public long? FileSize { get; set; }
-    public DateTime UploadTime{ get; set; }
+    public DateTime UploadTime { get; set; }
+    public ICollection<Transaction>? Transactions { get; set; }
 }

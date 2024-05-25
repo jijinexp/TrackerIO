@@ -18,9 +18,11 @@ public static class ServiceExtensions
 
     public static void AddDatabase(this WebApplicationBuilder builder)
     {
+        var connectionString = builder.Configuration.GetConnectionString("BuckWiseDbConnection");
         builder.Services.AddDbContext<TrackerDataContext>(options =>
-            options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection") ??
+            options.UseNpgsql(connectionString ??
                               throw new InvalidOperationException(
-                                  $"Connection string for {nameof(TrackerDataContext)} not found.")));
+                                  $"Connection string for {nameof(TrackerDataContext)} not found."), 
+                                  x => x.MigrationsAssembly(typeof(TrackerDataContext).Assembly.FullName) ));
     }
 }

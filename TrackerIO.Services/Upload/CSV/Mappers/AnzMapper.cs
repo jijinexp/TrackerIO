@@ -18,7 +18,7 @@ public sealed class AnzMapper : ClassMap<CsvTransaction>
                 x.Row.GetField<string>("Particulars") + 
                 x.Row.GetField<string>("Details")).GetId());
         Map(m => m.Type).Name("Type");
-        Map(m => m.Description).Name("Details");
+        Map(m => m.Payee).Name("Details");
         Map(m => m.Date).TypeConverter(new DateOnlyConverter("dd/MM/yyyy")).Name("Date");
         Map(m => m.Amount).TypeConverter(new CurrencyConverter()).Name("Amount");
         Map(m => m.Bank).Default("ANZ").Optional();

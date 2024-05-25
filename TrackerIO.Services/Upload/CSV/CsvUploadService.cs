@@ -80,10 +80,11 @@ public class CsvUploadService : IUploadService
                 {
                     CsvId = variableCsvRecord.TransactionId,
                     Date = variableCsvRecord.Date,
-                    Description = variableCsvRecord.Description,
+                    Description = variableCsvRecord.TransactionName,
                     Type = variableCsvRecord.Type,
                     Bank = variableCsvRecord.Bank,
-                    Amount = variableCsvRecord.Amount
+                    Amount = variableCsvRecord.Amount,
+                    File = toUploadFile
                 };
                 transactions.Add(transaction);
             }
